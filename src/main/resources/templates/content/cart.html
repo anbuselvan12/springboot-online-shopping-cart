@@ -27,9 +27,16 @@
 	<form method="POST" th:object="${cartForm}" th:action="@{/cart}">
 		<div class="container">
 			<div class="container-fluid">
-				<button onclick="location.href='/validationCartCustomer';" class="pull-right btn btn-success">
+
+				<!--VALIDATION CART-->
+				<br/>
+				<br/>
+				<a th:href="@{|/validationCartCustomer|}"
+				   class="pull-right btn btn-success">
 					Validation Your Cart !
-				</button>
+				</a>
+				<!--VALIDATION CART-->
+
 				<div class="page-header">
 					<h4>Total: <span th:utext="${amount}"></span></h4>
 				</div>

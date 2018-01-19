@@ -51,7 +51,7 @@ public class OrdersDaoImpl implements OrdersDao{
     @Override
     public void saveOrders(CartModelInfo cartModelInfo) {
 
-        int ordersNum = this.getMaxOrderNum() + 1;
+        int ordersNum = 1 + 1;
         Orders orders = new Orders();
 
         orders.setOrderNum(ordersNum);

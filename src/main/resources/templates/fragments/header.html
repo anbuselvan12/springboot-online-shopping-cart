@@ -57,7 +57,8 @@
                 </li>
                 <li sec:authorize="hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">
                     <form th:action="@{/logout}">
-                       <button type="submit" class="btn btn-danger navbar-btn">
+                       <button onclick="return confirm('yakin ingin keluar dari sistem?')"
+                               type="submit" class="btn btn-danger navbar-btn">
                             Logout !
                        </button>
                     </form>

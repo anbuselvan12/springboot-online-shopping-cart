@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title th:utext="${title}"></title>
+</head>
+<body>
+    <th:block th:include="/fragments/header"></th:block>
+        <div class="container">
+            <div class="container-fluid">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <h2>Cofirmation Payment</h2>
+                    <div class="page-header">
+                        <h4>Data Users</h4>
+                        <ul>
+                            <li>Name: <span th:utext="${myCart.customerModelInfo.name}"></span></li>
+                            <li>Email: <span th:utext="${myCart.customerModelInfo.email}"></span></li>
+                            <li>Phone: <span th:utext="${myCart.customerModelInfo.phone}"></span></li>
+                            <li>Address: <span th:utext="${myCart.customerModelInfo.address}"></span></li>
+                        </ul>
+                        <h4>Data Pembelian</h4>
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Pict</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody th:each="cartLineModelInfo : ${myCart.cartLines}">
+                                <tr>
+                                    <input type="hidden" th:value="${cartLineModelInfo.productModelInfo.idproduct}"/>
+                                    <td>
+                                        <img width="150px;" height="150px;"
+                                                th:src="@{|/productImage?code=${cartLineModelInfo.productModelInfo.idproduct}|}"/>
+                                    </td>
+                                    <td>
+                                        <span th:utext="${cartLineModelInfo.productModelInfo.idproduct}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:utext="${cartLineModelInfo.productModelInfo.name}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:utext="${cartLineModelInfo.quantity}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:utext="${#numbers.formatDecimal(cartLineModelInfo.productModelInfo.price,3,2,'COMMA')}"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <th>
+                                <h4>SubTotal : <span style="color:red;" th:utext="${#numbers.formatDecimal(amount,3,2,'COMMA')}"></span></h4>
+                            </th>
+                        </table>
+                        <br/>
+                        <br/>
+                        <div class="col-lg-offset-4">
+                            <form th:action="@{/sendAndSaved}" method="POST">
+                                <a th:href="@{|/validationCartCustomer|}" class="btn btn-primary">
+                                    <span>Edit Data Users ?</span>
+                                </a>
+                                <a th:href="@{|/cart|}" class="btn btn-primary">
+                                    <span>Edit Data Cart ?</span>
+                                </a>
+                                <button type="submit" class="btn btn-success">
+                                    <span>Save Your Cart !</span>
+                                </button>
+                                <br/>
+                                <br/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <th:block th:include="/fragments/footers"></th:block>
+</body>
+</html>

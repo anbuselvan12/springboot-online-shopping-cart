@@ -23,10 +23,10 @@ public class CustomerFormValidator implements Validator{
         CustomerForm custInfo = (CustomerForm) target;
 
         //mengecheck fields dari customers
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"name","NotEmpty.productForm.name");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.productForm.email");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "phone", "NotEmpty.productForm.phone");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address", "NotEmpty.productForm.address");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"name","NotEmpty.customerForm.name");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.customerForm.email");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "phone", "NotEmpty.customerForm.phone");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address", "NotEmpty.customerForm.address");
 
         if(!emailValidator.isValid(custInfo.getEmail())){
             errors.rejectValue("email", "Pattern.customerForm.email");

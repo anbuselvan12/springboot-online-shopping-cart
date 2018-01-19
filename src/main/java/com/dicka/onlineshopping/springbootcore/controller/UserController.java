@@ -1,6 +1,7 @@
 package com.dicka.onlineshopping.springbootcore.controller;
 
 import com.dicka.onlineshopping.springbootcore.dao.AccountsDao;
+import com.dicka.onlineshopping.springbootcore.dao.OrdersDao;
 import com.dicka.onlineshopping.springbootcore.dao.ProductDao;
 import com.dicka.onlineshopping.springbootcore.entity.Accounts;
 import com.dicka.onlineshopping.springbootcore.entity.Product;
@@ -15,9 +16,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,14 +30,16 @@ public class UserController {
 
     private final AccountsDao accountsDao;
     private final ProductDao productDao;
+    private final OrdersDao ordersDao;
 
     @Autowired
     private CustomerFormValidator customerFormValidator;
 
     @Autowired
-    public UserController(AccountsDao accountsDao, ProductDao productDao){
+    public UserController(AccountsDao accountsDao, ProductDao productDao, OrdersDao ordersDao){
         this.accountsDao=accountsDao;
         this.productDao=productDao;
+        this.ordersDao=ordersDao;
     }
 
     //@InitBinder binding
@@ -143,8 +149,72 @@ public class UserController {
 
         CustomerForm customerForm = new CustomerForm(customerModelInfo);
 
+        model.addAttribute("title", "Validation Cart");
+
         model.addAttribute("customerForm", customerForm);
 
-        return "";
+        return "content/validationCart";
+    }
+
+    //post validator cart customer
+    @RequestMapping(value = "/validationCartCustomer", method = RequestMethod.POST)
+    public String cartValidatorCustomer(HttpServletRequest request,
+                                        Model model,
+                                        @ModelAttribute("customerForm")
+                                        @Validated CustomerForm customerForm,
+                                        BindingResult result,
+                                        final RedirectAttributes redirectAttributes){
+
+        if(result.hasErrors()){
+            customerForm.setValid(false);
+            model.addAttribute("title", "Validation Cart");
+            return "content/validationCart";
+        }
+
+        customerForm.setValid(true);
+        CartModelInfo cartModelInfo = Utils.getCartInSession(request);
+        CustomerModelInfo customerModelInfo = new CustomerModelInfo(customerForm);
+        cartModelInfo.setCustomerModelInfo(customerModelInfo);
+
+        return "redirect:/confirmation";
+    }
+
+    //confirmation
+    @RequestMapping(value = "/confirmation", method = RequestMethod.GET)
+    public String cartValidatorCustomerConfirmation(HttpServletRequest request,
+                                                    Model model){
+
+        CartModelInfo cartModelInfo = Utils.getCartInSession(request);
+
+        if(cartModelInfo == null || cartModelInfo.isEmpty()){
+
+            return "redirect:/cart";
+        }else if(!cartModelInfo.isValidCustomer()){
+            return "redirect:/validationCartCustomer";
+        }
+        model.addAttribute("title", "Confirmation Payment");
+        model.addAttribute("myCart", cartModelInfo);
+        model.addAttribute("amount", cartModelInfo.getAmountTotal());
+        return "content/validationCartCustomerConfirmation";
+    }
+
+    @RequestMapping(value = "/sendAndSaved", method = RequestMethod.POST)
+    public String saveTheShoppingCart(HttpServletRequest request){
+        CartModelInfo cartModelInfo = Utils.getCartInSession(request);
+
+        if(cartModelInfo.isEmpty()){
+            return "redirect:/cart";
+        }else if(!cartModelInfo.isValidCustomer()){
+            return "redirect:/validationCartCustomer";
+        }
+        try{
+            ordersDao.saveOrders(cartModelInfo);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //remove session
+        Utils.removeCartSession(request);
+        return "redirect:/index";
     }
 }
