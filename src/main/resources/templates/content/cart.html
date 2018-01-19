@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<!--MUNCUL JIKA ADA CART-->
+<!--HEADER-->
 <th:block th:include="/fragments/header"></th:block>
 <!--MUNCUL JIKA CART KOSONG-->
 <th:block th:if="${cartForm == null || cartForm.cartLines == null || cartForm.cartLines.empty}">
@@ -22,10 +22,14 @@
 	</div>
 </th:block>
 
+<!--MUNCUL JIKA ADA CART TERISI-->
 <th:block th:if="${cartForm!=null || cartForm.cartLines!=null||!cartForm.cartLines.empty}">
-	<form method="POST" th:object="${cartForm}">
+	<form method="POST" th:object="${cartForm}" th:action="@{/cart}">
 		<div class="container">
 			<div class="container-fluid">
+				<button onclick="location.href='/validationCartCustomer';" class="pull-right btn btn-success">
+					Validation Your Cart !
+				</button>
 				<div class="page-header">
 					<h4>Total: <span th:utext="${amount}"></span></h4>
 				</div>
@@ -62,36 +66,41 @@
 								<div class="col-lg-10">
 								<input type="number" class="form-control"
 								th:name="|cartLines[${varStatus.index}].quantity|"
-								th:value="${cartLineModelInfo.quantity}"/>
+								th:value="${cartLineModelInfo.quantity}" min="1" max="10"/>
+									<!--idproduct hidden-->
+									<input type="hidden" th:name="|cartLines[${varStatus.index}].productModelInfo.idproduct|"
+									th:value="${cartLineModelInfo.productModelInfo.idproduct}"/>
 								</div>
 							</td>
-							<td th:utext="${cartLineModelInfo.productModelInfo.name}"></td>
-							<td th:utext="${#numbers.formatDecimal(cartLineModelInfo.productModelInfo.price,3,2,'COMMA')}"></td>
 							<td>
-								<a class="btn btn-danger">
-									Remove
+								<br/>
+								<span th:utext="${cartLineModelInfo.productModelInfo.name}"></span>
+							</td>
+							<td>
+								<br/>
+								<span th:utext="${#numbers.formatDecimal(cartLineModelInfo.productModelInfo.price,3,2,'COMMA')}"></span>
+							</td>
+							<td>
+								<br/>
+								<a onclick="return confirm('yakin ingin membatalkan item ini?')"
+								   th:href="@{|/removeCartItem?code=${cartLineModelInfo.productModelInfo.idproduct}|}" class="btn btn-danger">
+									cancel
 								</a>
 								<br/>
-								<a href="" class="btn btn-primary">
-									Quantity
-								</a>
+								<button type="submit" class="btn btn-primary">
+									update
+								</button>
 							</td>
 						</tr>
 					</tbody>
-					<tfoot>
-						<tr>
-							<th>Pict</th>
-							<th>Quantity</th>
-							<th>Name</th>
-							<th>Price</th>
-							<th>Opsi</th>
-						</tr>
-					</tfoot>
 				</table>
 			</div>
 		</div>
 	</form>
 </th:block>
+<!--FOOTERS-->
+<br/>
+<br/>
 <th:block th:include="/fragments/footers"></th:block>
 </body>
 </html>

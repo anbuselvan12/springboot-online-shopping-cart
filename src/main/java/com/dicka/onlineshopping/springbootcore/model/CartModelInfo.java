@@ -9,7 +9,7 @@ public class CartModelInfo {
 
     private CustomerModelInfo customerModelInfo;
 
-    private final List<CartLineModelInfo> cartLines = new ArrayList<>();
+    private final List<CartLineModelInfo> cartLines = new ArrayList<CartLineModelInfo>();
 
     public CartModelInfo(){}
 
@@ -30,8 +30,9 @@ public class CartModelInfo {
     }
 
     public List<CartLineModelInfo> getCartLines(){
-        return cartLines;
+        return this.cartLines;
     }
+
 
     //cart line mencari berdasarkan kode product di dalam basket
     private CartLineModelInfo findByCode(Long code){
@@ -58,7 +59,6 @@ public class CartModelInfo {
         }
 
         int newQuantity = lineModelInfo.getQuantity() + quantity;
-        //jika jumlah barang kurang dari 0 nol tidak sama dengan 1 !! (validasi)
         if(newQuantity <= 0){
             this.cartLines.remove(lineModelInfo);
         }else{
@@ -68,19 +68,18 @@ public class CartModelInfo {
 
     //update product berdasarkan code
     public void updateProduct(Long code, int quantity){
-        //{{findByCode}} methode ini ada di dalam class CartModelInfo
-        CartLineModelInfo lineModelInfo = this.findByCode(code);
+        CartLineModelInfo line = this.findByCode(code);
 
-        if(lineModelInfo != null){
-            if(quantity <= 0){
-                this.cartLines.remove(lineModelInfo);
+        if(line != null){
+            if(quantity<=0){
+                this.cartLines.remove(line);
             }else{
-                lineModelInfo.setQuantity(quantity);
+                line.setQuantity(quantity);
             }
         }
     }
 
-    //basket kosong validasi
+    //jika cart kosong, customer di direct ke page cart
     public boolean isEmpty(){
         return this.cartLines.isEmpty();
     }
@@ -118,12 +117,12 @@ public class CartModelInfo {
     }
 
     //how to update quantity ?
-    public void updateQuantity(CartModelInfo cartModelInfo){
-        if(cartModelInfo != null){
-            List<CartLineModelInfo> lineModelInfos = cartModelInfo.getCartLines();
-            for(CartLineModelInfo lineModelInfo: lineModelInfos){
-                this.updateProduct(lineModelInfo.getProductModelInfo().getIdproduct(),
-                        lineModelInfo.getQuantity());
+    public void updateQuantity(CartModelInfo cartForm){
+        if(cartForm != null){
+            List<CartLineModelInfo> lines = cartForm.getCartLines();
+            for(CartLineModelInfo line : lines){
+                this.updateProduct(line.getProductModelInfo().getIdproduct(),
+                        line.getQuantity());
             }
         }
     }
