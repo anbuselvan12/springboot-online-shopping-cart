@@ -1,4 +1,4 @@
-#Aplikasi Online Shopping Spring boot 
+# Aplikasi Online Shopping Spring boot 
 <h1>Teknologi Yang digunakan</h1>
 <br/>
 <table>
@@ -45,7 +45,7 @@
 
 <br/>
 <br/>
-#Secreen shoot program
+# Secreen shoot program
 
 #1 Index Beranda
 
