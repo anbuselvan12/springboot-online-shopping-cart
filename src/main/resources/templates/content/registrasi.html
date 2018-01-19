@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${title}"></title>
+</head>
+<body>
+    <th:block th:include="/fragments/header"></th:block>
+    <div class="container">
+        <div class="container-fluid">
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="page-header">
+                    <h2>Registrasi Users</h2>
+                </div>
+                <!--validasi success-->
+                    <div th:if="${accounts == true}" class="alert alert-success alert-dismissable">
+                        <a class="close" data-dismiss="alert" aria-label="close">x</a>
+                            <strong th:utext="${valid}"></strong>
+                    </div>
+                <!--validasi success-->
+               <form class="form-horizontal" th:object="${accounts}" th:action="@{/registrasi}" method="POST">
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">Firstname:</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" name="firstname" th:field="*{firstname}" placeholder="Username" />
+                            <!--validasi-->
+                            <label style="color: red" th:if="${#fields.hasErrors('firstname')}" 
+                            th:errors="*{firstname}"></label>
+                        </div>
+                   </div>
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">Lastname:</label>
+                        <div class="col-lg-6">
+                            <input type="text" name="lastname" class="form-control" th:field="*{lastname}" placeholder="Lastname" />
+                            <!--validasi-->
+                            <label style="color: red" th:if="${#fields.hasErrors('lastname')}" 
+                            th:errors="*{lastname}"></label>
+                        </div>
+                   </div>
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">Username:</label>
+                        <div class="col-lg-6">
+                            <input type="text" name="Username"  class="form-control" th:field="*{username}" placeholder="Username" />
+                            <!--validasi-->
+                            <label style="color: red" th:if="${#fields.hasErrors('username')}" 
+                            th:errors="*{username}"></label>
+                        </div>
+                   </div>
+                   <div class="form-group">
+                        <label class="col-lg-3 control-label">Password:</label>
+                        <div class="col-lg-6">
+                            <input type="password"  class="form-control" name="password" th:field="*{password}" 
+                            placeholder="Password"/>
+                            <!--validasi-->
+                            <label style="color: red" th:if="${#fields.hasErrors('password')}" 
+                            th:errors="*{password}"></label>
+                        </div>
+                   </div>
+                   <div class="col-lg-4 col-lg-offset-4">
+                        <button class="btn btn-primary btn btn-block">
+                            Registrasi Accounts
+                        </button>
+                   </div>
+               </form>
+            </div>
+        </div>
+    </div>
+<th:block th:include="/fragments/footers"></th:block>
+</body>
+</html>

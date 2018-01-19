@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${title}"></title>
+</head>
+<body>
+    <th:block th:include="/fragments/header"></th:block>
+
+        <div class="container">
+            <div class="container-fluid">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="page-header">
+                        <h3>Manage Data</h3>
+                    </div>
+                    <form class="form-horizontal"
+                          method="POST"
+                          th:object="${productForm}"
+                          th:action="@{/adminProductCreate}"
+                          enctype="multipart/form-data"
+                          id="myForm">
+                        <!--HIDDEN FIEDL-->
+                        <input type="hidden" th:field="*{newProduct}" />
+                        <th:block th:if="${!productForm.newProduct}">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">ID Product :</label>
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control" th:field="*{code}" readonly=""/>
+                                </div>
+                            </div>
+                        </th:block>
+                        <!--HIDDEN FIELD-->
+                        <!--NAME PRODUCT-->
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Name:</label>
+                            <div class="col-lg-6">
+                                <input th:field="*{name}" type="text" class="form-control"
+                                placeholder="Name Product"/>
+                                <label th:if="${#fields.hasErrors('name')}" style="color:red;"
+                                       th:errors="*{name}">..</label>
+                            </div>
+                        </div>
+
+                        <!--PRICE PRODUCT-->
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Price:</label>
+                            <div class="col-lg-6">
+                                <input th:field="*{price}" type="number" class="form-control"
+                                       placeholder="Price Procut" />
+                                <label th:if="${#fields.hasErrors('price')}" style="color:red;"
+                                       th:errors="*{price}">..</label>
+                            </div>
+                        </div>
+
+                        <!--IMAGE PRODUCT-->
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Image</label>
+                            <div class="col-lg-6">
+                                <img th:src="@{|/productImage?code=${productForm.code}|}" width="100"/>
+                            </div>
+                        </div>
+
+                        <!--IMAGES SHOW-->
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Upload Image :</label>
+                            <div class="col-lg-6">
+                                <input class="form-control" type="file" th:field="*{fileData}"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-lg-offset-4"
+                             sec:authorize="hasRole('ROLE_ADMIN')">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                Saved
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <th:block th:include="/fragments/footers"></th:block>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:utext="${title}"></title>
+
+</head>
+<body>
+    <!--HEADER NAVIGATION BAR-->
+    <th:block th:include="fragments/header"></th:block>
+
+        <div class="container">
+
+            <div class="container-fluid">
+
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-4" th:each="produk : ${productList}">
+
+                    <div class="card">
+                        <a class="img-card" th:href="@{|/|}">
+                            <img th:src="@{|/productImage?code=${produk.idproduct}|}"/>
+                        </a>
+                        <br />
+                        <div class="card-content">
+                            <h4 class="card-title">
+                                <span th:utext="${produk.name}"></span>
+                            </h4>
+                            <div>
+                                <h5>
+                                    <span th:utext="${#numbers.formatDecimal(produk.price,2,2,'COMMA')}"></span>
+                                </h5>
+                            </div>
+                            <div>
+                                <a th:href="@{|/addToCart?code=${produk.idproduct}|}"
+                                   class="btn btn-success">
+                                    Add To Cart !
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-read-more">
+                            <br/>
+                            <br/>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            </div>
+
+        </div>
+
+    <!--FOOTER BAR-->
+    <th:block th:include="fragments/footers"></th:block>
+</body>
+</html>

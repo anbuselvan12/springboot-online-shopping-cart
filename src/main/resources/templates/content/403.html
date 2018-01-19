@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${title}"></title>
+</head>
+<body>
+    <!--Jumbotron-->
+    <th:block th:include="fragments/header"></th:block>
+    <div class="container">
+        <div class="container-fluid">
+        <div class="page-header">
+        <div class="jumbotron">
+            <h1>403 Access Denied !</h1>
+            <p>Untuk mengakses halaman ini dibutuhkan level pengguna yang sepadan !</p>
+        </div>
+        </div>
+        </div>
+    </div>
+    <th:block th:include="fragments/footers"></th:block>
+</body>
+</html>

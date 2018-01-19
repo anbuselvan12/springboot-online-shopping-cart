@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title th:text="${title}"></title>
+</head>
+<body>
+<th:block th:include="/fragments/header"></th:block>
+<div class="container">
+	<div class="container-fluid">
+		<div class="col-lg-10 col-lg-offset-1">
+			<h3 th:utext="${datalogin}"></h3>
+			<br/>
+			<div sec:authorize="hasRole('ROLE_ADMIN')">
+			<button type="button"
+					onclick="location.href='/adminProductCreate';" class="btn btn-primary">
+				Tambah Data
+			</button>
+			</div>
+			<div class="page-header">
+				<table class="table table-hover table-striped" id="myTabel">
+					<thead>
+						<tr>
+							<th>Pict</th>
+							<th>ID Product</th>
+							<th>Nama</th>
+							<th>Price</th>
+							<th>Opsi</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="produk : ${products}">
+							<td>
+								<img th:src="@{|/productImage?code=${produk.idproduct}|}"
+								width="150px" height="120px"/>
+							</td>
+							<td th:utext="${produk.idproduct}"></td>
+							<td th:utext="${produk.name}"></td>
+							<td th:utext="${#numbers.formatDecimal(produk.price,2,2,'COMMA')}"></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')">
+								<br/>
+								<br/>
+								<a th:href="@{|/adminShowProduct?code=${produk.idproduct}|}"
+								   class="btn btn-primary">
+									Update
+								</a>
+								<!--nanti kita isi-->
+								<a onclick="return confirm('yakin ingin hapus data ini?')"
+								   th:href="@{|/adminDeleteProduct?code=${produk.idproduct}|}"
+								   class="btn btn-danger">
+									Hapus
+								</a>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th>Pict</th>
+							<th>ID Product</th>
+							<th>Nama</th>
+							<th>Price</th>
+							<th>Opsi</th>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<th:block th:include="/fragments/footers"></th:block>
+</body>
+</html>
