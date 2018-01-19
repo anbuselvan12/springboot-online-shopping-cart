@@ -1,7 +1,7 @@
 #Aplikasi Online Shopping Spring boot 
 <h1>Teknologi Yang digunakan</h1>
 <br/>
-<table border="1">
+<table>
 <thead>
 <tr>
 <th>NO</th>
