@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title th:utext="${title}"></title>
+</head>
+<body>
+    <th:block th:include="fragments/header"></th:block>
+        <div class="container">
+            <div class="container-fluid">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="page-header">
+                        <h3>Details Pembelian Cart Customer</h3>
+                    </div>
+                    <li>
+                        <ul>*Nama :<span th:utext="${orders.customerName}"></span></ul>
+                        <ul>*Email :<span th:utext="${orders.customerEmail}"></span></ul>
+                        <ul>*Address :<span th:utext="${orders.customerAddress}"></span></ul>
+                        <ul>*Order: <span th:utext="${#dates.format(orders.orderDate,'dd-MM-yyyy HH:mm')}"></span></ul>
+                    </li>
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <th>ID Orders</th>
+                            <th>ID Product</th>
+                            <th>Nama</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                        </thead>
+                        <tbody>
+                            <tr th:each="detil : ${detils}">
+                                <td th:utext="${detil.orders.idorders}"></td>
+                                <td th:utext="${detil.product.idproduct}"></td>
+                                <td th:utext="${detil.product.name}"></td>
+                                <td th:utext="${detil.quantity}"></td>
+                                <td th:utext="${detil.price}"></td>
+                                <td th:utext="${detil.amount}"></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>ID Orders</th>
+                                <th>ID Product</th>
+                                <th>Nama</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Amount</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <th:block th:include="fragments/footers"></th:block>
+</body>
+</html>

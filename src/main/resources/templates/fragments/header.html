@@ -46,6 +46,10 @@
                         sec:authorize="hasRole('ROLE_ADMIN')">
                         <a th:href="@{/adminProduct}">Product</a>
                     </li>
+                    <li th:classappend="${#httpServletRequest.getRequestURI() == '/adminCart' ? 'active': ''}"
+                        sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/adminCart}">Data Cart</a>
+                    </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li sec:authorize="isAnonymous()">

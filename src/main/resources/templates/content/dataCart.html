@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:utext="${title}"></title>
+</head>
+<body>
+    <th:block th:include="/fragments/header"></th:block>
+        <div class="container">
+            <div class="container-fluid">
+                    <div class="col-lg-11 col-lg-offset-1">
+                        <div class="page-header">
+                            <h3>Data Cart</h3>
+                            <div class="page-header">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Tanggal Order</th>
+                                            <th>Customer Name</th>
+                                            <th>Customer Email</th>
+                                            <th>Customer Address</th>
+                                            <th>Amount</th>
+                                            <th>See Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="order : ${datas}">
+                                            <th th:utext="${#dates.format(order.orderDate,'dd-MM-yyyy HH:mm')}"></th>
+                                            <th th:utext="${order.customerName}"></th>
+                                            <th th:utext="${order.customerEmail}"></th>
+                                            <th th:utext="${order.customerAddress}"></th>
+                                            <th th:utext="${order.amount}"></th>
+                                            <th>
+                                                <a th:href="@{|/dataDetils?code=${order.idorders}|}"
+                                                   class="btn btn-primary">
+                                                    See Details
+                                                </a>
+                                            </th>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Tanggal Order</th>
+                                            <th>Customer Name</th>
+                                            <th>Customer Email</th>
+                                            <th>Customer Address</th>
+                                            <th>Amount</th>
+                                            <th>See Details</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <br/>
+                                <br/>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    <th:block th:include="/fragments/footers"></th:block>
+</body>
+</html>

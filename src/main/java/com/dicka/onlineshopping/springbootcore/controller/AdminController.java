@@ -1,11 +1,15 @@
 package com.dicka.onlineshopping.springbootcore.controller;
 
 import com.dicka.onlineshopping.springbootcore.dao.AccountsDao;
+import com.dicka.onlineshopping.springbootcore.dao.OrdersDao;
 import com.dicka.onlineshopping.springbootcore.dao.ProductDao;
 import com.dicka.onlineshopping.springbootcore.entity.Accounts;
+import com.dicka.onlineshopping.springbootcore.entity.Orders;
+import com.dicka.onlineshopping.springbootcore.entity.OrdersDetils;
 import com.dicka.onlineshopping.springbootcore.entity.Product;
 import com.dicka.onlineshopping.springbootcore.form.ProductForm;
 import com.dicka.onlineshopping.springbootcore.validator.ProductFormValidator;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,20 +26,25 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class AdminController {
 
     private final ProductDao productDao;
     private final AccountsDao accountsDao;
+    private final OrdersDao ordersDao;
     //form validator
     @Autowired
     private ProductFormValidator productFormValidator;
 
     @Autowired
-    public AdminController(ProductDao productDao, AccountsDao accountsDao){
+    public AdminController(ProductDao productDao,
+                           AccountsDao accountsDao,
+                           OrdersDao ordersDao){
         this.productDao=productDao;
         this.accountsDao=accountsDao;
+        this.ordersDao=ordersDao;
     }
 
     @InitBinder
@@ -65,6 +74,28 @@ public class AdminController {
             response.getOutputStream().write(product.getImage());
         }
         response.getOutputStream().close();
+    }
+
+    //data cart
+    @RequestMapping(value = "/adminCart", method = RequestMethod.GET)
+    public ModelAndView getDataCart(){
+        ModelAndView view = new ModelAndView();
+        view.addObject("title", "Data Cart Customer");
+        view.addObject("datas", ordersDao.getListOrders());
+        view.setViewName("content/dataCart");
+        return view;
+    }
+
+    @RequestMapping(value = "/dataDetils", method = RequestMethod.GET)
+    public String getDataCartOrdersDetils(@RequestParam(value = "code", defaultValue = "")
+                                          String code, Model model){
+
+        model.addAttribute("title", "Data Detils");
+        Orders orders = ordersDao.findOrders(Long.parseLong(code));
+        List<OrdersDetils> ordersDetils = ordersDao.findOneOrders(Long.parseLong(code));
+        model.addAttribute("detils", ordersDetils);
+        model.addAttribute("orders", orders);
+        return "content/dataCartDetils";
     }
 
     //list product

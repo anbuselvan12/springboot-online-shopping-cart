@@ -57,6 +57,8 @@ public class ConfigurationSecuritySistem extends WebSecurityConfigurerAdapter{
                 .antMatchers("/confirmation").hasAuthority("ROLE_USER")
                 .antMatchers("/validationCartCustomer").hasAuthority("ROLE_USER")
                 .antMatchers("/adminShowProduct").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/dataDetils").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/adminCart").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/adminDeleteProduct").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/adminProductCreate").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()

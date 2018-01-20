@@ -6,6 +6,7 @@ import com.dicka.onlineshopping.springbootcore.entity.OrdersDetils;
 import com.dicka.onlineshopping.springbootcore.entity.Product;
 import com.dicka.onlineshopping.springbootcore.model.*;
 import com.dicka.onlineshopping.springbootcore.repository.OrderRepository;
+import com.dicka.onlineshopping.springbootcore.repository.OrdersDetilRepository;
 import com.dicka.onlineshopping.springbootcore.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,14 +26,19 @@ public class OrdersDaoImpl implements OrdersDao{
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final OrdersDetilRepository ordersDetilRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
-    public OrdersDaoImpl(OrderRepository orderRepository, ProductRepository productRepository){
+    public OrdersDaoImpl(OrderRepository orderRepository,
+                         ProductRepository productRepository,
+                         OrdersDetilRepository ordersDetilRepository){
+
         this.orderRepository=orderRepository;
         this.productRepository=productRepository;
+        this.ordersDetilRepository=ordersDetilRepository;
     }
 
     //orderNum
@@ -90,16 +96,35 @@ public class OrdersDaoImpl implements OrdersDao{
 
     @Override
     public Orders findOrders(Long idorders) {
-        return null;
+        return orderRepository.findOne(idorders);
+    }
+
+    @Override
+    public List<Orders> getListOrders() {
+        return orderRepository.findAll();
+    }
+
+    @Override
+    public List<OrdersDetils> findOneOrders(Long idorders) {
+        String query = "select o from OrdersDetils as o where o.orders.idorders=?";
+        return entityManager.createQuery(query).setParameter(1, idorders)
+                .getResultList();
     }
 
     @Override
     public OrdersModelInfo getOrdersInfo(Long idorders) {
-        return null;
+        Orders orders = this.findOrders(idorders);
+        if(orders == null){
+            return null;
+        }
+
+        return new OrdersModelInfo(orders.getIdorders(), orders.getOrderDate(),
+                orders.getOrderNum(), orders.getAmount(), orders.getCustomerName(),
+                orders.getCustomerAddress(), orders.getCustomerEmail(), orders.getCustomerPhone());
     }
 
     @Override
-    public List<OrderDetilsModelInfo> getListOrdersDetils() {
-        return null;
+    public List<OrdersDetils> getListOrdersDetils() {
+        return ordersDetilRepository.findAll();
     }
 }
